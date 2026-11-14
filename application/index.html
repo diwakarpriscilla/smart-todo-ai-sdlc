@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart To-Do</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+        <h1>My To-Do List</h1>
+
+        <div class="task-input">
+            <label for="taskInput">Task name</label>
+            <input
+                type="text"
+                id="taskInput"
+                placeholder="Enter your task"
+            >
+
+            <button id="addTaskButton">Add Task</button>
+        </div>
+
+        <h2>My Tasks</h2>
+
+        <ul id="taskList"></ul>
+
+        <p id="taskSummary">No tasks available</p>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
