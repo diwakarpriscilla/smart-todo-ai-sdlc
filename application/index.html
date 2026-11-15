@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,10 +19,21 @@
                 placeholder="Enter your task"
             >
 
+            <label for="dueDateInput">Due date (optional)</label>
+            <input type="date" id="dueDateInput">
+
+            <label for="remindAtInput">Remind me at (optional)</label>
+            <input type="datetime-local" id="remindAtInput">
+            <p class="help-text">Note: reminders work only while this page is open.</p>
+
+            <div id="formError" class="form-error" hidden></div>
+
             <button id="addTaskButton">Add Task</button>
         </div>
 
         <h2>My Tasks</h2>
+
+        <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
 
         <ul id="taskList"></ul>
 
