@@ -42,3 +42,17 @@ See the Jira story mapping in the Planning Agent JSON output.
 - M-1: Data model updated & due date shown w/ overdue indicator
  - M-2: Reminder configuration & in-app notifications
  - M-3: Hardening (edge cases, accessibility, final tests)
+
+## Git Branch Strategy
+
+- Repository: diwakarpriscilla/smart-todo-ai-sdlc
+- Base branch: main (protected: no direct pushes, no merges without approval)
+- One feature branch per EPIC:
+  - EPIC EPMCDMETST-<EPIC_NUMBER> (E01: Due dates & reminders)
+  - Branch name: feature/EPMCDMETST-<EPIC_NUMBER>-due-dates-reminders
+- Commits: one or more per story, message format "EPMCDMETST-<STORY_NUMBER>: <message>"
+- Pull request: one draft PR from the feature branch into main
+- Rework: Code Review and Testing fixes are added as new commits on the same branch and PR (no force-push, no new PR)
+- Merge: only a human merges, after final approval
+- Allowed files for development: application/index.html, application/script.js, application/style.css, README.md
+- Docs in application/docs/ are written by Planning and Design only
