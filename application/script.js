@@ -22,7 +22,7 @@ function loadTasks() {
     const usedIds = new Set();
 
     return stored
-        .filter(t => t && typeof t === "object")
+        .filter(t => t && typeof t === "object" && typeof t.name === "string" && t.name.trim() !== "")
         .map(t => {
             let id = t.id;
             if (id === undefined || id === null || usedIds.has(id)) {
@@ -32,8 +32,8 @@ function loadTasks() {
 
             return {
                 id: id,
-                name: String(t.name === undefined ? "" : t.name),
-                completed: Boolean(t.completed),
+                name: t.name.trim(),
+                completed: t.completed === true || t.completed === "true",
                 priority: PRIORITIES.includes(t.priority) ? t.priority : DEFAULT_PRIORITY
             };
         });
