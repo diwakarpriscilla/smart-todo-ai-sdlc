@@ -341,7 +341,4 @@ addTaskButton.addEventListener("click", () => {
     renderTasks();
 });
 
-if (localStorage.getItem("tasks") !== null) {
-    saveTasks();
-}
 renderTasks();
