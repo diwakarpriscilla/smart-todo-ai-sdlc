@@ -312,6 +312,10 @@ function renderTasks() {
 
 filterButtons.forEach(button => {
     button.addEventListener("click", () => {
+        if (button.dataset.filter !== currentFilter) {
+            editingId = null;
+            editDraft = "";
+        }
         currentFilter = button.dataset.filter;
         renderTasks();
     });
