@@ -42,6 +42,8 @@ function loadTasks() {
 let tasks = loadTasks();
 let currentFilter = "all";
 let editingId = null;
+let editDraft = "";
+let focusEditInput = false;
 
 const taskInput = document.getElementById("taskInput");
 const prioritySelect = document.getElementById("prioritySelect");
@@ -49,6 +51,7 @@ const addTaskButton = document.getElementById("addTaskButton");
 const taskList = document.getElementById("taskList");
 const taskSummary = document.getElementById("taskSummary");
 const filterButtons = document.querySelectorAll(".filter-button");
+const editNotice = document.getElementById("editNotice");
 
 function saveTasks() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -101,13 +104,42 @@ function createPrioritySelect(task) {
     return select;
 }
 
+function clearEditNotice() {
+    editNotice.textContent = "";
+    editNotice.hidden = true;
+}
+
 function startEditing(id) {
+    if (editingId !== null && editingId !== id) {
+        const current = findTask(editingId);
+        const label = current ? ` "${current.name}"` : "";
+        editNotice.textContent =
+            `Finish editing${label} first: please Save or Cancel the current edit before editing another task.`;
+        editNotice.hidden = false;
+
+        const activeInput = taskList.querySelector(".edit-input");
+        if (activeInput) {
+            activeInput.focus();
+        }
+        return;
+    }
+
+    const target = findTask(id);
+    if (!target) {
+        return;
+    }
+
     editingId = id;
+    editDraft = target.name;
+    focusEditInput = true;
+    clearEditNotice();
     renderTasks();
 }
 
 function cancelEditing() {
     editingId = null;
+    editDraft = "";
+    clearEditNotice();
     renderTasks();
 }
 
@@ -127,6 +159,8 @@ function saveEditing(id, input) {
     }
 
     editingId = null;
+    editDraft = "";
+    clearEditNotice();
     renderTasks();
 }
 
@@ -136,8 +170,12 @@ function createEditRow(li, task) {
     const input = document.createElement("input");
     input.type = "text";
     input.className = "edit-input";
-    input.value = task.name;
+    input.value = editDraft;
     input.setAttribute("aria-label", "Edit task name");
+
+    input.addEventListener("input", () => {
+        editDraft = input.value;
+    });
 
     input.addEventListener("keydown", event => {
         if (event.key === "Enter") {
@@ -216,6 +254,11 @@ function renderTasks() {
 
     if (editingId !== null && !findTask(editingId)) {
         editingId = null;
+        editDraft = "";
+    }
+
+    if (editingId === null) {
+        clearEditNotice();
     }
 
     const visibleTasks = tasks.filter(matchesFilter);
@@ -260,16 +303,16 @@ function renderTasks() {
     taskSummary.textContent =
         `${completed} of ${tasks.length} tasks completed`;
 
-    if (editInput) {
+    if (editInput && focusEditInput) {
         editInput.focus();
         editInput.select();
     }
+    focusEditInput = false;
 }
 
 filterButtons.forEach(button => {
     button.addEventListener("click", () => {
         currentFilter = button.dataset.filter;
-        editingId = null;
         renderTasks();
     });
 });
