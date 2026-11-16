@@ -20,10 +20,23 @@
                 placeholder="Enter your task"
             >
 
+            <label for="prioritySelect">Priority</label>
+            <select id="prioritySelect">
+                <option value="High">High</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Low">Low</option>
+            </select>
+
             <button id="addTaskButton">Add Task</button>
         </div>
 
         <h2>My Tasks</h2>
+
+        <div class="filters" role="group" aria-label="Filter tasks">
+            <button type="button" class="filter-button" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="filter-button" data-filter="active" aria-pressed="false">Active</button>
+            <button type="button" class="filter-button" data-filter="completed" aria-pressed="false">Completed</button>
+        </div>
 
         <ul id="taskList"></ul>
 
