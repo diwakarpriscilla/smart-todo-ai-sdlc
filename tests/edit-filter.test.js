@@ -178,18 +178,14 @@ test("Active -> Completed while editing cancels the edit and releases the lock",
     assert.deepStrictEqual(visibleNames(app), ["Done C", "Done D"]);
     assertNothingSaved(app);
 
-    startEdit(app, "Done C");
-    assert.ok(editInput(app), "another visible task can be edited immediately");
-    assert.strictEqual(editInput(app).value, "Done C");
-    assert.strictEqual(app.elements.editNotice.hidden, true);
+    assert.strictEqual(buttonIn(rowFor(app, "Done C"), "Edit"), undefined, "completed tasks have no Edit control");
 });
 
-test("Completed -> Active while editing cancels the edit and releases the lock", () => {
+test("Completed -> Active keeps the lock released and an incomplete task editable", () => {
     const app = boot(TASKS);
 
     app.filters.completed.click();
-    startEdit(app, "Done C");
-    typeInto(editInput(app), "Done C (unsaved)");
+    assert.strictEqual(buttonIn(rowFor(app, "Done C"), "Edit"), undefined);
 
     app.filters.active.click();
 
@@ -198,7 +194,7 @@ test("Completed -> Active while editing cancels the edit and releases the lock",
     assertNothingSaved(app);
 
     startEdit(app, "Active B");
-    assert.ok(editInput(app), "another visible task can be edited immediately");
+    assert.ok(editInput(app), "an incomplete task can be edited immediately");
     assert.strictEqual(editInput(app).value, "Active B");
     assert.strictEqual(app.elements.editNotice.hidden, true);
 });

@@ -125,7 +125,7 @@ function startEditing(id) {
     }
 
     const target = findTask(id);
-    if (!target) {
+    if (!target || target.completed) {
         return;
     }
 
@@ -153,7 +153,7 @@ function saveEditing(id, input) {
     }
 
     const target = findTask(id);
-    if (target) {
+    if (target && !target.completed) {
         target.name = name;
         saveTasks();
     }
@@ -224,9 +224,12 @@ function createViewRow(li, task) {
         renderTasks();
     });
 
-    const editButton = document.createElement("button");
-    editButton.textContent = "Edit";
-    editButton.addEventListener("click", () => startEditing(task.id));
+    let editButton = null;
+    if (!task.completed) {
+        editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.addEventListener("click", () => startEditing(task.id));
+    }
 
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
@@ -239,12 +242,11 @@ function createViewRow(li, task) {
 
     const actions = document.createElement("div");
     actions.className = "task-actions";
-    actions.append(
-        createPriorityBadge(task),
-        createPrioritySelect(task),
-        editButton,
-        deleteButton
-    );
+    actions.append(createPriorityBadge(task), createPrioritySelect(task));
+    if (editButton) {
+        actions.append(editButton);
+    }
+    actions.append(deleteButton);
 
     li.append(taskText, actions);
 }
@@ -252,7 +254,8 @@ function createViewRow(li, task) {
 function renderTasks() {
     taskList.innerHTML = "";
 
-    if (editingId !== null && !findTask(editingId)) {
+    const editingTask = editingId !== null ? findTask(editingId) : null;
+    if (editingId !== null && (!editingTask || editingTask.completed)) {
         editingId = null;
         editDraft = "";
     }
